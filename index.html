@@ -1,0 +1,3118 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>花卉查詢</title>
+<style>
+body { font-family: "Microsoft JhengHei", sans-serif; margin: 20px; background: #f5f5f5; }
+.header { background: linear-gradient(135deg, #2d8a4e, #1a6b3c); color: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; }
+.search-box { background: white; padding: 15px; border-radius: 8px; margin-bottom: 15px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+input { width: 100%; padding: 10px; border: 2px solid #ddd; border-radius: 4px; font-size: 16px; }
+input:focus { outline: none; border-color: #2d8a4e; }
+table { width: 100%; background: white; border-collapse: collapse; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+th, td { padding: 12px; text-align: left; border-bottom: 1px solid #eee; }
+th { background: #2d8a4e; color: white; font-weight: 600; }
+tr:hover { background: #f8f8f8; }
+.grade { padding: 4px 10px; border-radius: 12px; color: white; font-weight: 600; font-size: 13px; }
+.grade-閃 { background: #e53935; }
+.grade-星 { background: #f9a825; color: #333; }
+.grade-稀 { background: #8e24aa; }
+.grade-優 { background: #1e88e5; }
+.grade-普 { background: #43a047; }
+.count { color: #666; margin-bottom: 10px; }
+</style>
+</head>
+<body>
+<div class="header">
+<h1>🌸 花卉查詢系統</h1>
+<div>共 <strong id="total">0</strong> 種花卉</div>
+</div>
+<div class="search-box">
+<input type="text" id="search" placeholder="輸入花卉名稱搜尋..." onkeyup="searchFlowers()">
+<div class="count">找到 <strong id="count">0</strong> 筆</div>
+</div>
+<table>
+<thead>
+<tr><th>ID</th><th>花卉名稱</th><th>等級</th><th>分數</th><th>來源</th></tr>
+</thead>
+<tbody id="results"></tbody>
+</table>
+<script>
+[
+  {
+    "id": 1,
+    "name": "絨汪粉圓",
+    "grade": "閃",
+    "note": "累儲",
+    "score": 36,
+    "disabled": false
+  },
+  {
+    "id": 2,
+    "name": "竹香踏浪",
+    "grade": "閃",
+    "note": "活動",
+    "score": 30,
+    "disabled": false
+  },
+  {
+    "id": 3,
+    "name": "旋轉木馬",
+    "grade": "閃",
+    "note": "活動(萬鑽)",
+    "score": 28,
+    "disabled": false
+  },
+  {
+    "id": 4,
+    "name": "瓊樓玉宇",
+    "grade": "閃",
+    "note": "織夢商店",
+    "score": 30,
+    "disabled": false
+  },
+  {
+    "id": 5,
+    "name": "瓶間花語",
+    "grade": "閃",
+    "note": "活動",
+    "score": 30,
+    "disabled": false
+  },
+  {
+    "id": 6,
+    "name": "夢﹡櫻之誓約",
+    "grade": "閃",
+    "note": "織夢花",
+    "score": 28,
+    "disabled": false
+  },
+  {
+    "id": 7,
+    "name": "星月幻城",
+    "grade": "閃",
+    "note": "走花路",
+    "score": 34,
+    "disabled": false
+  },
+  {
+    "id": 8,
+    "name": "綿綿糖心",
+    "grade": "閃",
+    "note": "活動(萬鑽)",
+    "score": 28,
+    "disabled": false
+  },
+  {
+    "id": 9,
+    "name": "仙澤尋蹤",
+    "grade": "閃",
+    "note": "織夢商店",
+    "score": 32,
+    "disabled": false
+  },
+  {
+    "id": 10,
+    "name": "夢﹡千金盛宴",
+    "grade": "閃",
+    "note": "織夢花",
+    "score": 28,
+    "disabled": false
+  },
+  {
+    "id": 11,
+    "name": "夢﹡雙生幻鏡",
+    "grade": "閃",
+    "note": "織夢花",
+    "score": 28,
+    "disabled": false
+  },
+  {
+    "id": 12,
+    "name": "夢﹡童話奇緣",
+    "grade": "閃",
+    "note": "織夢花",
+    "score": 28,
+    "disabled": false
+  },
+  {
+    "id": 13,
+    "name": "夢﹡星夜守護",
+    "grade": "閃",
+    "note": "織夢花",
+    "score": 28,
+    "disabled": false
+  },
+  {
+    "id": 14,
+    "name": "珠光雙雀",
+    "grade": "閃",
+    "note": "累儲",
+    "score": 34,
+    "disabled": false
+  },
+  {
+    "id": 15,
+    "name": "傘下花眠",
+    "grade": "閃",
+    "note": "活動(萬鑽)",
+    "score": 28,
+    "disabled": false
+  },
+  {
+    "id": 16,
+    "name": "獅舞慶典",
+    "grade": "閃",
+    "note": "活動",
+    "score": 30,
+    "disabled": false
+  },
+  {
+    "id": 17,
+    "name": "夢﹡日月同輝",
+    "grade": "閃",
+    "note": "織夢花",
+    "score": 28,
+    "disabled": false
+  },
+  {
+    "id": 18,
+    "name": "朱閣狐影",
+    "grade": "閃",
+    "note": "織夢商店",
+    "score": 32,
+    "disabled": false
+  },
+  {
+    "id": 19,
+    "name": "夢﹡冰雪幽蘭",
+    "grade": "閃",
+    "note": "織夢花",
+    "score": 28,
+    "disabled": false
+  },
+  {
+    "id": 20,
+    "name": "桃映金簷",
+    "grade": "閃",
+    "note": "織夢商店",
+    "score": 30,
+    "disabled": false
+  },
+  {
+    "id": 21,
+    "name": "蝶戀貓",
+    "grade": "閃",
+    "note": "累儲",
+    "score": 32,
+    "disabled": false
+  },
+  {
+    "id": 22,
+    "name": "琉璃之心",
+    "grade": "閃",
+    "note": "水晶樹",
+    "score": 28,
+    "disabled": false
+  },
+  {
+    "id": 23,
+    "name": "豐花紫藤",
+    "grade": "星",
+    "note": "累儲",
+    "score": 26,
+    "disabled": false
+  },
+  {
+    "id": 24,
+    "name": "棉花熊熊",
+    "grade": "稀",
+    "note": "活動",
+    "score": 20,
+    "disabled": false
+  },
+  {
+    "id": 25,
+    "name": "七彩向陽花",
+    "grade": "稀",
+    "note": "禮包",
+    "score": 23,
+    "disabled": false
+  },
+  {
+    "id": 26,
+    "name": "暮歌花豌",
+    "grade": "星",
+    "note": "直播花",
+    "score": 26,
+    "disabled": false
+  },
+  {
+    "id": 27,
+    "name": "炫光珍珠",
+    "grade": "星",
+    "note": "禮包",
+    "score": 26,
+    "disabled": false
+  },
+  {
+    "id": 28,
+    "name": "星雲絮語",
+    "grade": "稀",
+    "note": "累儲",
+    "score": 23,
+    "disabled": false
+  },
+  {
+    "id": 29,
+    "name": "喵不可言",
+    "grade": "稀",
+    "note": "累儲",
+    "score": 23,
+    "disabled": false
+  },
+  {
+    "id": 30,
+    "name": "甜心弩箭",
+    "grade": "星",
+    "score": 26,
+    "note": "織夢商店",
+    "disabled": false
+  },
+  {
+    "id": 31,
+    "name": "歌劇魅影",
+    "grade": "星",
+    "score": 26,
+    "note": "織夢商店",
+    "disabled": false
+  },
+  {
+    "id": 32,
+    "name": "弦上花音",
+    "grade": "星",
+    "score": 26,
+    "note": "織夢商店",
+    "disabled": false
+  },
+  {
+    "id": 33,
+    "name": "落跑新娘",
+    "grade": "星",
+    "score": 26,
+    "note": "週花",
+    "disabled": false
+  },
+  {
+    "id": 34,
+    "name": "秋水伊人",
+    "grade": "星",
+    "score": 26,
+    "note": "週花",
+    "disabled": false
+  },
+  {
+    "id": 35,
+    "name": "星落夢海",
+    "grade": "星",
+    "score": 26,
+    "note": "累儲",
+    "disabled": false
+  },
+  {
+    "id": 36,
+    "name": "紫露凝光",
+    "grade": "星",
+    "score": 26,
+    "note": "週花",
+    "disabled": false
+  },
+  {
+    "id": 37,
+    "name": "天荷繁星",
+    "grade": "星",
+    "score": 26,
+    "note": "週花",
+    "disabled": false
+  },
+  {
+    "id": 38,
+    "name": "焰光赤夢",
+    "grade": "星",
+    "score": 26,
+    "note": "週花",
+    "disabled": false
+  },
+  {
+    "id": 39,
+    "name": "千層金",
+    "grade": "星",
+    "score": 26,
+    "note": "活動",
+    "disabled": false
+  },
+  {
+    "id": 40,
+    "name": "初蓮夢塘",
+    "grade": "星",
+    "score": 26,
+    "note": "週花",
+    "disabled": false
+  },
+  {
+    "id": 41,
+    "name": "月光飛燕草",
+    "grade": "星",
+    "score": 26,
+    "note": "週花",
+    "disabled": false
+  },
+  {
+    "id": 42,
+    "name": "流光春序",
+    "grade": "星",
+    "score": 26,
+    "note": "走花路",
+    "disabled": false
+  },
+  {
+    "id": 43,
+    "name": "玉瀾水榭",
+    "grade": "星",
+    "score": 26,
+    "note": "週花",
+    "disabled": false
+  },
+  {
+    "id": 44,
+    "name": "朱華鶴立",
+    "grade": "星",
+    "score": 26,
+    "note": "週花",
+    "disabled": false
+  },
+  {
+    "id": 45,
+    "name": "雲間祈願",
+    "grade": "星",
+    "score": 26,
+    "note": "直播花",
+    "disabled": false
+  },
+  {
+    "id": 46,
+    "name": "掌心祝福",
+    "grade": "星",
+    "score": 26,
+    "note": "直播花",
+    "disabled": false
+  },
+  {
+    "id": 47,
+    "name": "蔚藍鳶夢",
+    "grade": "星",
+    "score": 26,
+    "note": "直播花",
+    "disabled": false
+  },
+  {
+    "id": 48,
+    "name": "絳紫浮光",
+    "grade": "星",
+    "score": 26,
+    "note": "直播花",
+    "disabled": false
+  },
+  {
+    "id": 49,
+    "name": "金闕國色",
+    "grade": "星",
+    "score": 24,
+    "note": "水晶樹",
+    "disabled": false
+  },
+  {
+    "id": 50,
+    "name": "木香花",
+    "grade": "稀",
+    "score": 23,
+    "note": "累儲",
+    "disabled": false
+  },
+  {
+    "id": 51,
+    "name": "金鍊花",
+    "grade": "稀",
+    "score": 23,
+    "note": "週花",
+    "disabled": false
+  },
+  {
+    "id": 52,
+    "name": "蘆葦微微",
+    "grade": "稀",
+    "score": 23,
+    "note": "活動(萬鑽)",
+    "disabled": false
+  },
+  {
+    "id": 53,
+    "name": "淺紫大麗花",
+    "grade": "稀",
+    "score": 23,
+    "note": "週花",
+    "disabled": false
+  },
+  {
+    "id": 54,
+    "name": "芝芝莓莓",
+    "grade": "稀",
+    "score": 23,
+    "note": "週花",
+    "disabled": false
+  },
+  {
+    "id": 55,
+    "name": "錦簇荊影",
+    "grade": "稀",
+    "score": 23,
+    "note": "活動",
+    "disabled": false
+  },
+  {
+    "id": 56,
+    "name": "瓜葉菊",
+    "grade": "稀",
+    "score": 23,
+    "note": "週花",
+    "disabled": false
+  },
+  {
+    "id": 57,
+    "name": "美人櫻",
+    "grade": "稀",
+    "score": 23,
+    "note": "織夢花",
+    "disabled": false
+  },
+  {
+    "id": 58,
+    "name": "翠珠花",
+    "grade": "稀",
+    "score": 23,
+    "note": "織夢花",
+    "disabled": false
+  },
+  {
+    "id": 59,
+    "name": "石榴花",
+    "grade": "稀",
+    "score": 20,
+    "note": "鮮花商店",
+    "disabled": false
+  },
+  {
+    "id": 60,
+    "name": "黃花君子蘭",
+    "grade": "稀",
+    "score": 20,
+    "note": "鮮花商店",
+    "disabled": false
+  },
+  {
+    "id": 61,
+    "name": "純白君子蘭",
+    "grade": "稀",
+    "score": 20,
+    "note": "鮮花商店",
+    "disabled": false
+  },
+  {
+    "id": 62,
+    "name": "紫色曼陀羅",
+    "grade": "稀",
+    "score": 23,
+    "note": "直播花",
+    "disabled": false
+  },
+  {
+    "id": 63,
+    "name": "橙色曼陀羅",
+    "grade": "稀",
+    "score": 23,
+    "note": "直播花",
+    "disabled": false
+  },
+  {
+    "id": 64,
+    "name": "白色曼陀羅",
+    "grade": "稀",
+    "score": 20,
+    "note": "鮮花商店",
+    "disabled": false
+  },
+  {
+    "id": 65,
+    "name": "紅嘉蘭",
+    "grade": "稀",
+    "score": 23,
+    "note": "鮮花商店",
+    "disabled": false
+  },
+  {
+    "id": 66,
+    "name": "粉嘉蘭",
+    "grade": "稀",
+    "score": 20,
+    "note": "鮮花商店",
+    "disabled": false
+  },
+  {
+    "id": 67,
+    "name": "淺紫長春花",
+    "grade": "稀",
+    "score": 23,
+    "note": "直播花",
+    "disabled": false
+  },
+  {
+    "id": 68,
+    "name": "紫立金花",
+    "grade": "稀",
+    "score": 23,
+    "note": "直播花",
+    "disabled": false
+  },
+  {
+    "id": 69,
+    "name": "紫大星芹",
+    "grade": "稀",
+    "score": 23,
+    "note": "直播花",
+    "disabled": false
+  },
+  {
+    "id": 70,
+    "name": "龍吐珠粉",
+    "grade": "稀",
+    "score": 23,
+    "note": "直播花",
+    "disabled": false
+  },
+  {
+    "id": 71,
+    "name": "龍吐珠白",
+    "grade": "稀",
+    "score": 23,
+    "note": "直播花",
+    "disabled": false
+  },
+  {
+    "id": 72,
+    "name": "白色新娘花",
+    "grade": "稀",
+    "score": 23,
+    "note": "直播花",
+    "disabled": false
+  },
+  {
+    "id": 73,
+    "name": "粉馬纓丹",
+    "grade": "稀",
+    "score": 20,
+    "note": "鮮花商店",
+    "disabled": false
+  },
+  {
+    "id": 74,
+    "name": "紫馬纓丹",
+    "grade": "稀",
+    "score": 20,
+    "note": "鮮花商店",
+    "disabled": false
+  },
+  {
+    "id": 75,
+    "name": "綠掌",
+    "grade": "稀",
+    "score": 20,
+    "note": "鮮花商店",
+    "disabled": false
+  },
+  {
+    "id": 76,
+    "name": "紫掌",
+    "grade": "稀",
+    "score": 20,
+    "note": "鮮花商店",
+    "disabled": false
+  },
+  {
+    "id": 77,
+    "name": "藍色風信子",
+    "grade": "稀",
+    "score": 20,
+    "note": "鮮花商店",
+    "disabled": false
+  },
+  {
+    "id": 78,
+    "name": "黃色龍船花",
+    "grade": "稀",
+    "score": 20,
+    "note": "鮮花商店",
+    "disabled": false
+  },
+  {
+    "id": 79,
+    "name": "紫荷花",
+    "grade": "稀",
+    "score": 20,
+    "note": "鮮花商店",
+    "disabled": false
+  },
+  {
+    "id": 80,
+    "name": "白荷花",
+    "grade": "稀",
+    "score": 20,
+    "note": "鮮花商店",
+    "disabled": false
+  },
+  {
+    "id": 81,
+    "name": "橘貓爪花",
+    "grade": "稀",
+    "score": 20,
+    "note": "鮮花商店",
+    "disabled": false
+  },
+  {
+    "id": 82,
+    "name": "紫貓爪花",
+    "grade": "稀",
+    "score": 20,
+    "note": "鮮花商店",
+    "disabled": false
+  },
+  {
+    "id": 83,
+    "name": "藍錦葵",
+    "grade": "稀",
+    "score": 20,
+    "note": "鮮花商店",
+    "disabled": false
+  },
+  {
+    "id": 84,
+    "name": "白色繡線菊",
+    "grade": "稀",
+    "score": 20,
+    "note": "鮮花商店",
+    "disabled": false
+  },
+  {
+    "id": 85,
+    "name": "紅馬纓丹",
+    "grade": "稀",
+    "score": 20,
+    "note": "鮮花商店",
+    "disabled": false
+  },
+  {
+    "id": 86,
+    "name": "橙馬蹄蓮",
+    "grade": "優",
+    "score": 14,
+    "note": "鮮花商店",
+    "disabled": false
+  },
+  {
+    "id": 87,
+    "name": "粉馬蹄蓮",
+    "grade": "優",
+    "score": 14,
+    "note": "鮮花商店",
+    "disabled": false
+  },
+  {
+    "id": 88,
+    "name": "白馬蹄蓮",
+    "grade": "優",
+    "score": 14,
+    "note": "鮮花商店",
+    "disabled": false
+  },
+  {
+    "id": 89,
+    "name": "紫龍面花",
+    "grade": "優",
+    "score": 14,
+    "note": "鮮花商店",
+    "disabled": false
+  },
+  {
+    "id": 90,
+    "name": "海風花豌",
+    "grade": "星",
+    "score": 26,
+    "note": "直播花",
+    "disabled": false
+  },
+  {
+    "id": 91,
+    "name": "紫暮鳶影",
+    "grade": "星",
+    "score": 26,
+    "note": "直播花",
+    "disabled": false
+  },
+  {
+    "id": 92,
+    "name": "桃溪搖夢",
+    "grade": "星",
+    "score": 24,
+    "note": "活動(萬鑽)",
+    "disabled": false
+  },
+  {
+    "id": 93,
+    "name": "流丹花豌",
+    "grade": "星",
+    "score": 26,
+    "note": "直播花",
+    "disabled": false
+  },
+  {
+    "id": 94,
+    "name": "紫夜彼岸",
+    "grade": "星",
+    "score": 26,
+    "note": "直播花",
+    "disabled": false
+  },
+  {
+    "id": 95,
+    "name": "月裳玉影",
+    "grade": "星",
+    "score": 26,
+    "note": "織夢商店",
+    "disabled": false
+  },
+  {
+    "id": 96,
+    "name": "花音映紅",
+    "grade": "星",
+    "score": 26,
+    "note": "織夢商店",
+    "disabled": false
+  },
+  {
+    "id": 97,
+    "name": "綠野墜霞",
+    "grade": "星",
+    "score": 26,
+    "note": "禮包",
+    "disabled": false
+  },
+  {
+    "id": 98,
+    "name": "寶塔泡泡",
+    "grade": "星",
+    "score": 26,
+    "note": "禮包",
+    "disabled": false
+  },
+  {
+    "id": 99,
+    "name": "童夢起航",
+    "grade": "星",
+    "score": 26,
+    "note": "活動(萬鑽)",
+    "disabled": false
+  },
+  {
+    "id": 100,
+    "name": "星月曇花",
+    "grade": "星",
+    "score": 26,
+    "note": "活動",
+    "disabled": false
+  },
+  {
+    "id": 101,
+    "name": "碎光凝香",
+    "grade": "星",
+    "score": 26,
+    "note": "週花",
+    "disabled": false
+  },
+  {
+    "id": 102,
+    "name": "暮色星沙",
+    "grade": "星",
+    "score": 26,
+    "note": "活動",
+    "disabled": false
+  },
+  {
+    "id": 103,
+    "name": "重瓣水仙百合",
+    "grade": "星",
+    "score": 26,
+    "note": "週花",
+    "disabled": false
+  },
+  {
+    "id": 104,
+    "name": "幽藍鍾夢",
+    "grade": "星",
+    "score": 26,
+    "note": "走花路",
+    "disabled": false
+  },
+  {
+    "id": 105,
+    "name": "茸茸相依",
+    "grade": "星",
+    "score": 26,
+    "note": "活動(萬鑽)",
+    "disabled": false
+  },
+  {
+    "id": 106,
+    "name": "虹間綺色",
+    "grade": "星",
+    "score": 26,
+    "note": "週花",
+    "disabled": false
+  },
+  {
+    "id": 107,
+    "name": "霧紫九重葛",
+    "grade": "星",
+    "score": 26,
+    "note": "週花",
+    "disabled": false
+  },
+  {
+    "id": 108,
+    "name": "緋雲雪櫻",
+    "grade": "星",
+    "score": 26,
+    "note": "週花",
+    "disabled": false
+  },
+  {
+    "id": 109,
+    "name": "風中低語",
+    "grade": "星",
+    "score": 26,
+    "note": "直播花",
+    "disabled": false
+  },
+  {
+    "id": 110,
+    "name": "赤色彼岸",
+    "grade": "星",
+    "score": 26,
+    "note": "直播花",
+    "disabled": false
+  },
+  {
+    "id": 111,
+    "name": "蝶舞幽谷",
+    "grade": "星",
+    "score": 26,
+    "note": "織夢商店",
+    "disabled": false
+  },
+  {
+    "id": 112,
+    "name": "赤晶浮光",
+    "grade": "星",
+    "score": 26,
+    "note": "直播花",
+    "disabled": false
+  },
+  {
+    "id": 113,
+    "name": "星光搖曳",
+    "grade": "星",
+    "score": 26,
+    "note": "累儲",
+    "disabled": false
+  },
+  {
+    "id": 114,
+    "name": "霧凇",
+    "grade": "稀",
+    "score": 23,
+    "note": "織夢花",
+    "disabled": false
+  },
+  {
+    "id": 115,
+    "name": "風蠟花",
+    "grade": "稀",
+    "score": 23,
+    "note": "織夢花",
+    "disabled": false
+  },
+  {
+    "id": 116,
+    "name": "雀梅",
+    "grade": "稀",
+    "score": 23,
+    "note": "織夢花",
+    "disabled": false
+  },
+  {
+    "id": 117,
+    "name": "藍荊玫瑰",
+    "grade": "稀",
+    "score": 23,
+    "note": "織夢花",
+    "disabled": false
+  },
+  {
+    "id": 118,
+    "name": "暗香寒梅",
+    "grade": "稀",
+    "score": 23,
+    "note": "織夢花",
+    "disabled": false
+  },
+  {
+    "id": 119,
+    "name": "陽春桃樹",
+    "grade": "稀",
+    "score": 23,
+    "note": "織夢花",
+    "disabled": false
+  },
+  {
+    "id": 120,
+    "name": "紫色滿天星",
+    "grade": "稀",
+    "score": 23,
+    "note": "直播花",
+    "disabled": false
+  },
+  {
+    "id": 121,
+    "name": "紅雞冠花",
+    "grade": "稀",
+    "score": 23,
+    "note": "直播花",
+    "disabled": false
+  },
+  {
+    "id": 122,
+    "name": "淡粉非洲堇",
+    "grade": "稀",
+    "score": 20,
+    "note": "水晶樹",
+    "disabled": false
+  },
+  {
+    "id": 123,
+    "name": "黃色小蒼蘭",
+    "grade": "稀",
+    "score": 23,
+    "note": "活動",
+    "disabled": false
+  },
+  {
+    "id": 124,
+    "name": "垂櫻",
+    "grade": "稀",
+    "score": 23,
+    "note": "織夢花",
+    "disabled": false
+  },
+  {
+    "id": 125,
+    "name": "兔耳狸藻",
+    "grade": "稀",
+    "score": 23,
+    "note": "活動",
+    "disabled": false
+  },
+  {
+    "id": 126,
+    "name": "垂絲茉莉",
+    "grade": "稀",
+    "score": 23,
+    "note": "鮮花特典",
+    "disabled": false
+  },
+  {
+    "id": 127,
+    "name": "白色非洲菊",
+    "grade": "稀",
+    "score": 23,
+    "note": "走花路",
+    "disabled": false
+  },
+  {
+    "id": 128,
+    "name": "金輝玫瑰",
+    "grade": "稀",
+    "score": 23,
+    "note": "織夢花",
+    "disabled": false
+  },
+  {
+    "id": 129,
+    "name": "婚紗薔薇",
+    "grade": "稀",
+    "score": 23,
+    "note": "織夢花",
+    "disabled": false
+  },
+  {
+    "id": 130,
+    "name": "粉薔薇",
+    "grade": "稀",
+    "score": 23,
+    "note": "禮包",
+    "disabled": false
+  },
+  {
+    "id": 131,
+    "name": "紫藤花",
+    "grade": "稀",
+    "score": 23,
+    "note": "織夢花",
+    "disabled": false
+  },
+  {
+    "id": 132,
+    "name": "提燈百合",
+    "grade": "稀",
+    "score": 23,
+    "note": "鮮花特典",
+    "disabled": false
+  },
+  {
+    "id": 133,
+    "name": "虞美人",
+    "grade": "稀",
+    "score": 23,
+    "note": "織夢花",
+    "disabled": false
+  },
+  {
+    "id": 134,
+    "name": "龍膽花",
+    "grade": "稀",
+    "score": 23,
+    "note": "織夢花",
+    "disabled": false
+  },
+  {
+    "id": 135,
+    "name": "葡萄風信子",
+    "grade": "稀",
+    "score": 23,
+    "note": "鮮花特典",
+    "disabled": false
+  },
+  {
+    "id": 136,
+    "name": "洋甘菊",
+    "grade": "稀",
+    "score": 20,
+    "note": "活動",
+    "disabled": false
+  },
+  {
+    "id": 137,
+    "name": "紫色風信子",
+    "grade": "稀",
+    "score": 23,
+    "note": "直播花",
+    "disabled": false
+  },
+  {
+    "id": 138,
+    "name": "粉山茶",
+    "grade": "稀",
+    "score": 23,
+    "note": "直播花",
+    "disabled": false
+  },
+  {
+    "id": 139,
+    "name": "金黃梔子花",
+    "grade": "稀",
+    "score": 23,
+    "note": "直播花",
+    "disabled": false
+  },
+  {
+    "id": 140,
+    "name": "白色梔子花",
+    "grade": "稀",
+    "score": 23,
+    "note": "直播花",
+    "disabled": false
+  },
+  {
+    "id": 141,
+    "name": "橙色龍船花",
+    "grade": "稀",
+    "score": 23,
+    "note": "直播花",
+    "disabled": false
+  },
+  {
+    "id": 142,
+    "name": "粉色松蟲草",
+    "grade": "稀",
+    "score": 23,
+    "note": "直播花",
+    "disabled": false
+  },
+  {
+    "id": 143,
+    "name": "紫杜鵑",
+    "grade": "稀",
+    "score": 23,
+    "note": "直播花",
+    "disabled": false
+  },
+  {
+    "id": 144,
+    "name": "橙錦葵",
+    "grade": "稀",
+    "score": 23,
+    "note": "直播花",
+    "disabled": false
+  },
+  {
+    "id": 145,
+    "name": "玫紅牡丹",
+    "grade": "稀",
+    "score": 23,
+    "note": "直播花",
+    "disabled": false
+  },
+  {
+    "id": 146,
+    "name": "淡色牡丹",
+    "grade": "稀",
+    "score": 23,
+    "note": "直播花",
+    "disabled": false
+  },
+  {
+    "id": 147,
+    "name": "綠棉花",
+    "grade": "稀",
+    "score": 23,
+    "note": "直播花",
+    "disabled": false
+  },
+  {
+    "id": 148,
+    "name": "粉棉花",
+    "grade": "稀",
+    "score": 23,
+    "note": "直播花",
+    "disabled": false
+  },
+  {
+    "id": 149,
+    "name": "粉色滿天星",
+    "grade": "稀",
+    "score": 23,
+    "note": "直播花",
+    "disabled": false
+  },
+  {
+    "id": 150,
+    "name": "無盡夏白",
+    "grade": "稀",
+    "score": 23,
+    "note": "直播花",
+    "disabled": false
+  },
+  {
+    "id": 151,
+    "name": "無盡夏藍",
+    "grade": "稀",
+    "score": 23,
+    "note": "直播花",
+    "disabled": false
+  },
+  {
+    "id": 152,
+    "name": "黃雞冠花",
+    "grade": "稀",
+    "score": 23,
+    "note": "直播花",
+    "disabled": false
+  },
+  {
+    "id": 153,
+    "name": "粉大星芹",
+    "grade": "稀",
+    "score": 20,
+    "note": "鮮花商店",
+    "disabled": false
+  },
+  {
+    "id": 154,
+    "name": "白薔薇",
+    "grade": "稀",
+    "score": 20,
+    "note": "鮮花商店",
+    "disabled": false
+  },
+  {
+    "id": 155,
+    "name": "紅掌",
+    "grade": "稀",
+    "score": 20,
+    "note": "鮮花商店",
+    "disabled": false
+  },
+  {
+    "id": 156,
+    "name": "白大星芹",
+    "grade": "稀",
+    "score": 20,
+    "note": "鮮花商店",
+    "disabled": false
+  },
+  {
+    "id": 157,
+    "name": "粉木棉",
+    "grade": "稀",
+    "score": 20,
+    "note": "鮮花商店",
+    "disabled": false
+  },
+  {
+    "id": 158,
+    "name": "粉色風信子",
+    "grade": "稀",
+    "score": 20,
+    "note": "鮮花商店",
+    "disabled": false
+  },
+  {
+    "id": 159,
+    "name": "白山茶",
+    "grade": "稀",
+    "score": 20,
+    "note": "鮮花商店",
+    "disabled": false
+  },
+  {
+    "id": 160,
+    "name": "紅仙客來",
+    "grade": "稀",
+    "score": 20,
+    "note": "鮮花商店",
+    "disabled": false
+  },
+  {
+    "id": 161,
+    "name": "粉仙客來",
+    "grade": "稀",
+    "score": 20,
+    "note": "鮮花商店",
+    "disabled": false
+  },
+  {
+    "id": 162,
+    "name": "粉杜鵑",
+    "grade": "稀",
+    "score": 20,
+    "note": "鮮花商店",
+    "disabled": false
+  },
+  {
+    "id": 163,
+    "name": "粉錦葵",
+    "grade": "稀",
+    "score": 20,
+    "note": "鮮花商店",
+    "disabled": false
+  },
+  {
+    "id": 164,
+    "name": "黃色非洲堇",
+    "grade": "稀",
+    "score": 20,
+    "note": "鮮花商店",
+    "disabled": false
+  },
+  {
+    "id": 165,
+    "name": "荼蘼花",
+    "grade": "稀",
+    "score": 20,
+    "note": "鮮花商店",
+    "disabled": false
+  },
+  {
+    "id": 166,
+    "name": "紫色繡線菊",
+    "grade": "稀",
+    "score": 20,
+    "note": "鮮花商店",
+    "disabled": false
+  },
+  {
+    "id": 167,
+    "name": "綺光玫瑰",
+    "grade": "稀",
+    "score": 23,
+    "note": "累儲",
+    "disabled": false
+  },
+  {
+    "id": 168,
+    "name": "旱雪蓮",
+    "grade": "稀",
+    "score": 20,
+    "note": "累儲",
+    "disabled": false
+  },
+  {
+    "id": 169,
+    "name": "白曼珠沙華",
+    "grade": "稀",
+    "score": 20,
+    "note": "水晶樹",
+    "disabled": false
+  },
+  {
+    "id": 170,
+    "name": "淡藍三角梅",
+    "grade": "稀",
+    "score": 20,
+    "note": "水晶樹",
+    "disabled": false
+  },
+  {
+    "id": 171,
+    "name": "斑馬報春紫",
+    "grade": "稀",
+    "score": 20,
+    "note": "活動",
+    "disabled": false
+  },
+  {
+    "id": 172,
+    "name": "月見草",
+    "grade": "稀",
+    "score": 20,
+    "note": "活動",
+    "disabled": false
+  },
+  {
+    "id": 173,
+    "name": "圓錐木繡球",
+    "grade": "稀",
+    "score": 23,
+    "note": "禮包",
+    "disabled": false
+  },
+  {
+    "id": 174,
+    "name": "金苞花",
+    "grade": "稀",
+    "score": 23,
+    "note": "鮮花特典",
+    "disabled": false
+  },
+  {
+    "id": 175,
+    "name": "霓裳玫瑰",
+    "grade": "稀",
+    "score": 23,
+    "note": "週花",
+    "disabled": false
+  },
+  {
+    "id": 176,
+    "name": "白色吊燈花",
+    "grade": "稀",
+    "score": 23,
+    "note": "鮮花特典",
+    "disabled": false
+  },
+  {
+    "id": 177,
+    "name": "幽蘭蝶夢",
+    "grade": "稀",
+    "score": 23,
+    "note": "累儲",
+    "disabled": false
+  },
+  {
+    "id": 178,
+    "name": "橙星君子蘭",
+    "grade": "稀",
+    "score": 23,
+    "note": "直播花",
+    "disabled": false
+  },
+  {
+    "id": 179,
+    "name": "紅色龍船花",
+    "grade": "稀",
+    "score": 23,
+    "note": "直播花",
+    "disabled": false
+  },
+  {
+    "id": 180,
+    "name": "紫色松蟲草",
+    "grade": "稀",
+    "score": 23,
+    "note": "直播花",
+    "disabled": false
+  },
+  {
+    "id": 181,
+    "name": "紫仙客來",
+    "grade": "稀",
+    "score": 23,
+    "note": "直播花",
+    "disabled": false
+  },
+  {
+    "id": 182,
+    "name": "粉貓爪花",
+    "grade": "稀",
+    "score": 23,
+    "note": "直播花",
+    "disabled": false
+  },
+  {
+    "id": 183,
+    "name": "橙雞冠花",
+    "grade": "稀",
+    "score": 23,
+    "note": "直播花",
+    "disabled": false
+  },
+  {
+    "id": 184,
+    "name": "黃薔薇",
+    "grade": "稀",
+    "score": 20,
+    "note": "鮮花商店",
+    "disabled": false
+  },
+  {
+    "id": 185,
+    "name": "藍洋桔梗",
+    "grade": "稀",
+    "score": 20,
+    "note": "鮮花商店",
+    "disabled": false
+  },
+  {
+    "id": 186,
+    "name": "無盡夏粉",
+    "grade": "稀",
+    "score": 20,
+    "note": "鮮花商店",
+    "disabled": false
+  },
+  {
+    "id": 187,
+    "name": "銀葉地膚",
+    "grade": "稀",
+    "score": 23,
+    "note": "累儲",
+    "disabled": false
+  },
+  {
+    "id": 188,
+    "name": "紫色非洲堇",
+    "grade": "稀",
+    "score": 20,
+    "note": "活動",
+    "disabled": false
+  },
+  {
+    "id": 189,
+    "name": "白棉花",
+    "grade": "稀",
+    "score": 20,
+    "note": "鮮花商店",
+    "disabled": false
+  },
+  {
+    "id": 190,
+    "name": "馬藺",
+    "grade": "稀",
+    "score": 23,
+    "note": "活動",
+    "disabled": false
+  },
+  {
+    "id": 191,
+    "name": "綠色乒乓菊",
+    "grade": "稀",
+    "score": 23,
+    "note": "直播花",
+    "disabled": false
+  },
+  {
+    "id": 192,
+    "name": "黃色乒乓菊",
+    "grade": "稀",
+    "score": 23,
+    "note": "直播花",
+    "disabled": false
+  },
+  {
+    "id": 193,
+    "name": "黃色合歡花",
+    "grade": "稀",
+    "score": 23,
+    "note": "直播花",
+    "disabled": false
+  },
+  {
+    "id": 194,
+    "name": "雲絮珠搖",
+    "grade": "稀",
+    "score": 23,
+    "note": "累儲",
+    "disabled": false
+  },
+  {
+    "id": 195,
+    "name": "綺羅鳶舞",
+    "grade": "星",
+    "score": 26,
+    "note": "直播花",
+    "disabled": false
+  },
+  {
+    "id": 196,
+    "name": "紫色康乃馨",
+    "grade": "優",
+    "score": 14,
+    "note": "鮮花商店",
+    "disabled": false
+  },
+  {
+    "id": 197,
+    "name": "橙色康乃馨",
+    "grade": "優",
+    "score": 14,
+    "note": "鮮花商店",
+    "disabled": false
+  },
+  {
+    "id": 198,
+    "name": "橙萬壽菊",
+    "grade": "優",
+    "score": 14,
+    "note": "鮮花商店",
+    "disabled": false
+  },
+  {
+    "id": 199,
+    "name": "北極花",
+    "grade": "優",
+    "score": 14,
+    "note": "VIP商店",
+    "disabled": false
+  },
+  {
+    "id": 200,
+    "name": "橙金魚草",
+    "grade": "優",
+    "score": 14,
+    "note": "鮮花商店",
+    "disabled": false
+  },
+  {
+    "id": 201,
+    "name": "粉荷花",
+    "grade": "優",
+    "score": 14,
+    "note": "水晶樹",
+    "disabled": false
+  },
+  {
+    "id": 202,
+    "name": "斑馬報春白",
+    "grade": "優",
+    "score": 14,
+    "note": "鮮花商店",
+    "disabled": false
+  },
+  {
+    "id": 203,
+    "name": "粉紅新娘花",
+    "grade": "優",
+    "score": 14,
+    "note": "鮮花商店",
+    "disabled": false
+  },
+  {
+    "id": 204,
+    "name": "紫洋桔梗",
+    "grade": "優",
+    "score": 14,
+    "note": "鮮花商店",
+    "disabled": false
+  },
+  {
+    "id": 205,
+    "name": "橙洋桔梗",
+    "grade": "優",
+    "score": 14,
+    "note": "鮮花商店",
+    "disabled": false
+  },
+  {
+    "id": 206,
+    "name": "粉色康乃馨",
+    "grade": "優",
+    "score": 14,
+    "note": "鮮花商店",
+    "disabled": false
+  },
+  {
+    "id": 207,
+    "name": "紅山茶花",
+    "grade": "優",
+    "score": 14,
+    "note": "鮮花商店",
+    "disabled": false
+  },
+  {
+    "id": 208,
+    "name": "噴泉草",
+    "grade": "優",
+    "score": 14,
+    "note": "水晶樹",
+    "disabled": false
+  },
+  {
+    "id": 209,
+    "name": "鳳梨花",
+    "grade": "優",
+    "score": 14,
+    "note": "鮮花商店",
+    "disabled": false
+  },
+  {
+    "id": 210,
+    "name": "薰衣草",
+    "grade": "優",
+    "score": 14,
+    "note": "鮮花商店",
+    "disabled": false
+  },
+  {
+    "id": 211,
+    "name": "斑馬報春粉",
+    "grade": "優",
+    "score": 14,
+    "note": "鮮花商店",
+    "disabled": false
+  },
+  {
+    "id": 212,
+    "name": "艾草",
+    "grade": "優",
+    "score": 14,
+    "note": "活動",
+    "disabled": false
+  },
+  {
+    "id": 213,
+    "name": "清香木",
+    "grade": "優",
+    "score": 14,
+    "note": "活動",
+    "disabled": false
+  },
+  {
+    "id": 214,
+    "name": "紅花鐵線蓮",
+    "grade": "優",
+    "score": 14,
+    "note": "鮮花特典",
+    "disabled": false
+  },
+  {
+    "id": 219,
+    "name": "迎春花",
+    "grade": "優",
+    "score": 14,
+    "note": "活動",
+    "disabled": false
+  },
+  {
+    "id": 221,
+    "name": "藍星花",
+    "grade": "優",
+    "score": 14,
+    "note": "VIP商店",
+    "disabled": false
+  },
+  {
+    "id": 222,
+    "name": "葉牡丹",
+    "grade": "優",
+    "score": 14,
+    "note": "鮮花特典",
+    "disabled": false
+  },
+  {
+    "id": 223,
+    "name": "刺芹",
+    "grade": "優",
+    "score": 14,
+    "note": "VIP商店",
+    "disabled": false
+  },
+  {
+    "id": 226,
+    "name": "鶴望蘭",
+    "grade": "優",
+    "score": 14,
+    "note": "活動",
+    "disabled": false
+  },
+  {
+    "id": 228,
+    "name": "油畫向日葵",
+    "grade": "優",
+    "score": 14,
+    "note": "VIP商店",
+    "disabled": false
+  },
+  {
+    "id": 229,
+    "name": "馬醉木",
+    "grade": "優",
+    "score": 14,
+    "note": "活動",
+    "disabled": false
+  },
+  {
+    "id": 230,
+    "name": "華沙非洲菊",
+    "grade": "優",
+    "score": 14,
+    "note": "活動",
+    "disabled": false
+  },
+  {
+    "id": 231,
+    "name": "橙色酢漿草",
+    "grade": "優",
+    "score": 14,
+    "note": "活動",
+    "disabled": false
+  },
+  {
+    "id": 233,
+    "name": "格桑花",
+    "grade": "優",
+    "score": 14,
+    "note": "活動",
+    "disabled": false
+  },
+  {
+    "id": 234,
+    "name": "熊童子",
+    "grade": "優",
+    "score": 14,
+    "note": "鮮花特典",
+    "disabled": false
+  },
+  {
+    "id": 235,
+    "name": "藍雪花",
+    "grade": "優",
+    "score": 14,
+    "note": "活動",
+    "disabled": false
+  },
+  {
+    "id": 236,
+    "name": "鑽石百合",
+    "grade": "優",
+    "score": 14,
+    "note": "活動",
+    "disabled": false
+  },
+  {
+    "id": 237,
+    "name": "粉白大岩桐",
+    "grade": "優",
+    "score": 14,
+    "note": "VIP商店",
+    "disabled": false
+  },
+  {
+    "id": 238,
+    "name": "黃萬壽菊",
+    "grade": "優",
+    "score": 14,
+    "note": "鮮花商店",
+    "disabled": false
+  },
+  {
+    "id": 239,
+    "name": "紅萬壽菊",
+    "grade": "優",
+    "score": 14,
+    "note": "鮮花商店",
+    "disabled": false
+  },
+  {
+    "id": 240,
+    "name": "鳳尾竹",
+    "grade": "優",
+    "score": 14,
+    "note": "活動",
+    "disabled": false
+  },
+  {
+    "id": 241,
+    "name": "高山羊齒",
+    "grade": "優",
+    "score": 14,
+    "note": "鮮花特典",
+    "disabled": false
+  },
+  {
+    "id": 242,
+    "name": "紅木棉",
+    "grade": "優",
+    "score": 14,
+    "note": "鮮花商店",
+    "disabled": false
+  },
+  {
+    "id": 243,
+    "name": "橙鶴芋",
+    "grade": "優",
+    "score": 14,
+    "note": "鮮花商店",
+    "disabled": false
+  },
+  {
+    "id": 244,
+    "name": "白鶴芋",
+    "grade": "優",
+    "score": 14,
+    "note": "鮮花商店",
+    "disabled": false
+  },
+  {
+    "id": 245,
+    "name": "白茉莉",
+    "grade": "優",
+    "score": 14,
+    "note": "鮮花商店",
+    "disabled": false
+  },
+  {
+    "id": 246,
+    "name": "粉色長春花",
+    "grade": "優",
+    "score": 14,
+    "note": "鮮花商店",
+    "disabled": false
+  },
+  {
+    "id": 247,
+    "name": "藍色長春花",
+    "grade": "優",
+    "score": 14,
+    "note": "鮮花商店",
+    "disabled": false
+  },
+  {
+    "id": 248,
+    "name": "白金魚草",
+    "grade": "優",
+    "score": 14,
+    "note": "鮮花商店",
+    "disabled": false
+  },
+  {
+    "id": 249,
+    "name": "粉金魚草",
+    "grade": "優",
+    "score": 14,
+    "note": "鮮花商店",
+    "disabled": false
+  },
+  {
+    "id": 250,
+    "name": "黃色立金花",
+    "grade": "優",
+    "score": 14,
+    "note": "鮮花商店",
+    "disabled": false
+  },
+  {
+    "id": 251,
+    "name": "綠色立金花",
+    "grade": "優",
+    "score": 14,
+    "note": "鮮花商店",
+    "disabled": false
+  },
+  {
+    "id": 252,
+    "name": "藍色松蟲草",
+    "grade": "優",
+    "score": 14,
+    "note": "鮮花商店",
+    "disabled": false
+  },
+  {
+    "id": 253,
+    "name": "白杜鵑",
+    "grade": "優",
+    "score": 14,
+    "note": "鮮花商店",
+    "disabled": false
+  },
+  {
+    "id": 254,
+    "name": "白色滿天星",
+    "grade": "優",
+    "score": 14,
+    "note": "鮮花商店",
+    "disabled": false
+  },
+  {
+    "id": 255,
+    "name": "藍風鈴草",
+    "grade": "優",
+    "score": 14,
+    "note": "鮮花商店",
+    "disabled": false
+  },
+  {
+    "id": 256,
+    "name": "紫風鈴草",
+    "grade": "優",
+    "score": 14,
+    "note": "鮮花商店",
+    "disabled": false
+  },
+  {
+    "id": 257,
+    "name": "白風鈴草",
+    "grade": "優",
+    "score": 14,
+    "note": "鮮花商店",
+    "disabled": false
+  },
+  {
+    "id": 258,
+    "name": "天鵝絨",
+    "grade": "優",
+    "score": 14,
+    "note": "活動",
+    "disabled": false
+  },
+  {
+    "id": 259,
+    "name": "美人蕉",
+    "grade": "普",
+    "score": 9,
+    "note": "",
+    "disabled": false
+  },
+  {
+    "id": 260,
+    "name": "黃色矮牽牛",
+    "grade": "普",
+    "score": 9,
+    "note": "",
+    "disabled": false
+  },
+  {
+    "id": 261,
+    "name": "白玫瑰",
+    "grade": "普",
+    "score": 9,
+    "note": "",
+    "disabled": false
+  },
+  {
+    "id": 262,
+    "name": "高山火絨草",
+    "grade": "普",
+    "score": 9,
+    "note": "",
+    "disabled": false
+  },
+  {
+    "id": 263,
+    "name": "藿香",
+    "grade": "普",
+    "score": 9,
+    "note": "",
+    "disabled": false
+  },
+  {
+    "id": 264,
+    "name": "紅玫瑰",
+    "grade": "普",
+    "score": 9,
+    "note": "",
+    "disabled": false
+  },
+  {
+    "id": 266,
+    "name": "紫色矮牽牛",
+    "grade": "普",
+    "score": 9,
+    "note": "",
+    "disabled": false
+  },
+  {
+    "id": 267,
+    "name": "勿忘草",
+    "grade": "普",
+    "score": 9,
+    "note": "",
+    "disabled": false
+  },
+  {
+    "id": 268,
+    "name": "黃鬱金香",
+    "grade": "普",
+    "score": 9,
+    "note": "",
+    "disabled": false
+  },
+  {
+    "id": 273,
+    "name": "粉鬱金香",
+    "grade": "普",
+    "score": 9,
+    "note": "",
+    "disabled": false
+  },
+  {
+    "id": 274,
+    "name": "粉色魯冰花",
+    "grade": "普",
+    "score": 9,
+    "note": "",
+    "disabled": false
+  },
+  {
+    "id": 275,
+    "name": "油菜花",
+    "grade": "普",
+    "score": 9,
+    "note": "",
+    "disabled": false
+  },
+  {
+    "id": 277,
+    "name": "雪花蓮",
+    "grade": "普",
+    "score": 9,
+    "note": "",
+    "disabled": false
+  },
+  {
+    "id": 278,
+    "name": "夾竹桃",
+    "grade": "普",
+    "score": 9,
+    "note": "",
+    "disabled": false
+  },
+  {
+    "id": 279,
+    "name": "三色堇",
+    "grade": "普",
+    "score": 9,
+    "note": "",
+    "disabled": false
+  },
+  {
+    "id": 280,
+    "name": "明黃向日葵",
+    "grade": "普",
+    "score": 9,
+    "note": "",
+    "disabled": false
+  },
+  {
+    "id": 281,
+    "name": "淡紫大岩桐",
+    "grade": "普",
+    "score": 9,
+    "note": "",
+    "disabled": false
+  },
+  {
+    "id": 282,
+    "name": "粉白雞蛋花",
+    "grade": "普",
+    "score": 9,
+    "note": "",
+    "disabled": false
+  },
+  {
+    "id": 283,
+    "name": "紫色鶴望蘭",
+    "grade": "普",
+    "score": 9,
+    "note": "",
+    "disabled": false
+  },
+  {
+    "id": 284,
+    "name": "紅色大麗花",
+    "grade": "普",
+    "score": 9,
+    "note": "",
+    "disabled": false
+  },
+  {
+    "id": 285,
+    "name": "淡藍魯冰花",
+    "grade": "普",
+    "score": 9,
+    "note": "",
+    "disabled": false
+  },
+  {
+    "id": 286,
+    "name": "粉色大麗花",
+    "grade": "普",
+    "score": 9,
+    "note": "",
+    "disabled": false
+  },
+  {
+    "id": 287,
+    "name": "龜背竹",
+    "grade": "普",
+    "score": 9,
+    "note": "",
+    "disabled": false
+  },
+  {
+    "id": 289,
+    "name": "紫桔梗",
+    "grade": "普",
+    "score": 9,
+    "note": "",
+    "disabled": false
+  },
+  {
+    "id": 290,
+    "name": "紫扶桑花",
+    "grade": "普",
+    "score": 9,
+    "note": "",
+    "disabled": false
+  },
+  {
+    "id": 291,
+    "name": "臘梅",
+    "grade": "普",
+    "score": 9,
+    "note": "",
+    "disabled": false
+  },
+  {
+    "id": 292,
+    "name": "橙扶桑花",
+    "grade": "普",
+    "score": 9,
+    "note": "",
+    "disabled": false
+  },
+  {
+    "id": 293,
+    "name": "玉簪花",
+    "grade": "普",
+    "score": 9,
+    "note": "",
+    "disabled": false
+  },
+  {
+    "id": 294,
+    "name": "白扶桑花",
+    "grade": "普",
+    "score": 9,
+    "note": "",
+    "disabled": false
+  },
+  {
+    "id": 295,
+    "name": "黃劍蘭",
+    "grade": "普",
+    "score": 9,
+    "note": "",
+    "disabled": false
+  },
+  {
+    "id": 296,
+    "name": "雞蛋花",
+    "grade": "普",
+    "score": 9,
+    "note": "",
+    "disabled": false
+  },
+  {
+    "id": 297,
+    "name": "橙色大麗花",
+    "grade": "普",
+    "score": 9,
+    "note": "",
+    "disabled": false
+  },
+  {
+    "id": 298,
+    "name": "白水仙",
+    "grade": "普",
+    "score": 9,
+    "note": "",
+    "disabled": false
+  },
+  {
+    "id": 299,
+    "name": "文竹",
+    "grade": "普",
+    "score": 9,
+    "note": "",
+    "disabled": false
+  },
+  {
+    "id": 300,
+    "name": "黃水仙",
+    "grade": "普",
+    "score": 9,
+    "note": "",
+    "disabled": false
+  },
+  {
+    "id": 301,
+    "name": "富貴竹",
+    "grade": "普",
+    "score": 9,
+    "note": "",
+    "disabled": false
+  },
+  {
+    "id": 302,
+    "name": "紫水仙",
+    "grade": "普",
+    "score": 9,
+    "note": "",
+    "disabled": false
+  },
+  {
+    "id": 303,
+    "name": "藍桔梗",
+    "grade": "普",
+    "score": 9,
+    "note": "",
+    "disabled": false
+  },
+  {
+    "id": 304,
+    "name": "淡紫喜林草",
+    "grade": "普",
+    "score": 9,
+    "note": "",
+    "disabled": false
+  },
+  {
+    "id": 305,
+    "name": "白桔梗",
+    "grade": "普",
+    "score": 9,
+    "note": "",
+    "disabled": false
+  },
+  {
+    "id": 306,
+    "name": "粉劍蘭",
+    "grade": "普",
+    "score": 9,
+    "note": "",
+    "disabled": false
+  },
+  {
+    "id": 307,
+    "name": "金黃富貴竹",
+    "grade": "普",
+    "score": 9,
+    "note": "",
+    "disabled": false
+  },
+  {
+    "id": 308,
+    "name": "紫劍蘭",
+    "grade": "普",
+    "score": 9,
+    "note": "",
+    "disabled": false
+  },
+  {
+    "id": 309,
+    "name": "淺藍蝴蝶蘭",
+    "grade": "普",
+    "score": 9,
+    "note": "",
+    "disabled": false
+  },
+  {
+    "id": 310,
+    "name": "風車果",
+    "grade": "普",
+    "score": 9,
+    "note": "",
+    "disabled": false
+  },
+  {
+    "id": 311,
+    "name": "淡粉蝴蝶蘭",
+    "grade": "普",
+    "score": 9,
+    "note": "",
+    "disabled": false
+  },
+  {
+    "id": 312,
+    "name": "相思豆",
+    "grade": "普",
+    "score": 9,
+    "note": "",
+    "disabled": false
+  },
+  {
+    "id": 313,
+    "name": "白色蝴蝶蘭",
+    "grade": "普",
+    "score": 9,
+    "note": "",
+    "disabled": false
+  },
+  {
+    "id": 314,
+    "name": "晚香玉",
+    "grade": "普",
+    "score": 9,
+    "note": "",
+    "disabled": false
+  },
+  {
+    "id": 315,
+    "name": "大花蕙蘭",
+    "grade": "普",
+    "score": 9,
+    "note": "",
+    "disabled": false
+  },
+  {
+    "id": 316,
+    "name": "綠毛球",
+    "grade": "普",
+    "score": 9,
+    "note": "",
+    "disabled": false
+  },
+  {
+    "id": 317,
+    "name": "粉百合",
+    "grade": "普",
+    "score": 9,
+    "note": "",
+    "disabled": false
+  },
+  {
+    "id": 318,
+    "name": "白百合",
+    "grade": "普",
+    "score": 9,
+    "note": "",
+    "disabled": false
+  },
+  {
+    "id": 319,
+    "name": "尤加利葉",
+    "grade": "普",
+    "score": 9,
+    "note": "",
+    "disabled": false
+  },
+  {
+    "id": 320,
+    "name": "鈴蘭",
+    "grade": "普",
+    "score": 9,
+    "note": "",
+    "disabled": false
+  },
+  {
+    "id": 321,
+    "name": "雛菊",
+    "grade": "普",
+    "score": 9,
+    "note": "",
+    "disabled": false
+  },
+  {
+    "id": 322,
+    "name": "紅鬱金香",
+    "grade": "普",
+    "score": 9,
+    "note": "",
+    "disabled": false
+  },
+  {
+    "id": 323,
+    "name": "淡粉矮牽牛",
+    "grade": "普",
+    "score": 9,
+    "note": "",
+    "disabled": false
+  },
+  {
+    "id": 324,
+    "name": "粉玫瑰",
+    "grade": "普",
+    "score": 9,
+    "note": "",
+    "disabled": false
+  },
+  {
+    "id": 325,
+    "name": "沁爽檸檬",
+    "grade": "星",
+    "score": 26,
+    "note": "週花",
+    "disabled": false
+  },
+  {
+    "id": 326,
+    "name": "夢﹡明日之星",
+    "grade": "閃",
+    "score": 28,
+    "note": "織夢花",
+    "disabled": false
+  },
+  {
+    "id": 327,
+    "name": "調色花園",
+    "grade": "星",
+    "score": 26,
+    "note": "週花",
+    "disabled": false
+  },
+  {
+    "id": 328,
+    "name": "大阿米芹",
+    "grade": "優",
+    "score": 14,
+    "note": "VIP商店",
+    "disabled": false
+  },
+  {
+    "id": 329,
+    "name": "紫色睡蓮",
+    "grade": "稀",
+    "score": 23,
+    "note": "織夢花",
+    "disabled": false
+  },
+  {
+    "id": 330,
+    "name": "清新白花",
+    "grade": "稀",
+    "score": 23,
+    "note": "織夢花",
+    "disabled": false
+  },
+  {
+    "id": 331,
+    "name": "六出花",
+    "grade": "稀",
+    "score": 23,
+    "note": "鮮花特典",
+    "disabled": false
+  },
+  {
+    "id": 332,
+    "name": "蔥花",
+    "grade": "優",
+    "score": 14,
+    "note": "鮮花特典",
+    "disabled": false
+  },
+  {
+    "id": 333,
+    "name": "紫色福祿考",
+    "grade": "優",
+    "score": 14,
+    "note": "活動",
+    "disabled": false
+  },
+  {
+    "id": 334,
+    "name": "洋牡丹",
+    "grade": "優",
+    "score": 14,
+    "note": "鮮花特典",
+    "disabled": false
+  },
+  {
+    "id": 335,
+    "name": "雪柳",
+    "grade": "優",
+    "score": 14,
+    "note": "走花路",
+    "disabled": false
+  },
+  {
+    "id": 336,
+    "name": "倒影鐵線蓮",
+    "grade": "優",
+    "score": 14,
+    "note": "走花路",
+    "disabled": false
+  },
+  {
+    "id": 337,
+    "name": "淡藍喜林草",
+    "grade": "普",
+    "score": 9,
+    "note": "",
+    "disabled": false
+  },
+  {
+    "id": 338,
+    "name": "青提晨露",
+    "grade": "星",
+    "score": 26,
+    "note": "週花",
+    "disabled": false
+  },
+  {
+    "id": 339,
+    "name": "蘋果奇遇",
+    "grade": "星",
+    "score": 26,
+    "note": "活動",
+    "disabled": false
+  },
+  {
+    "id": 340,
+    "name": "紫精靈康乃馨",
+    "grade": "星",
+    "score": 26,
+    "note": "直播花",
+    "disabled": false
+  },
+  {
+    "id": 341,
+    "name": "粉月曲",
+    "grade": "星",
+    "score": 26,
+    "note": "直播花",
+    "disabled": false
+  },
+  {
+    "id": 342,
+    "name": "高山杜鵑",
+    "grade": "星",
+    "score": 26,
+    "note": "直播花",
+    "disabled": false
+  },
+  {
+    "id": 343,
+    "name": "青花牡丹菊",
+    "grade": "星",
+    "score": 26,
+    "note": "直播花",
+    "disabled": false
+  },
+  {
+    "id": 344,
+    "name": "狐狸舞步",
+    "grade": "星",
+    "score": 26,
+    "note": "直播花",
+    "disabled": false
+  },
+  {
+    "id": 345,
+    "name": "玫瑰芍藥",
+    "grade": "星",
+    "score": 26,
+    "note": "直播花",
+    "disabled": false
+  },
+  {
+    "id": 346,
+    "name": "紙鳶蜀葵",
+    "grade": "星",
+    "score": 26,
+    "note": "活動",
+    "disabled": false
+  },
+  {
+    "id": 347,
+    "name": "蘑菇蘑菇",
+    "grade": "稀",
+    "score": 23,
+    "note": "活動",
+    "disabled": false
+  },
+  {
+    "id": 348,
+    "name": "豆豆布丁",
+    "grade": "稀",
+    "score": 23,
+    "note": "黑市商店",
+    "disabled": false
+  },
+  {
+    "id": 349,
+    "name": "橙色三角梅",
+    "grade": "稀",
+    "score": 23,
+    "note": "直播花",
+    "disabled": false
+  },
+  {
+    "id": 350,
+    "name": "紅唇卡特蘭",
+    "grade": "稀",
+    "score": 23,
+    "note": "直播花",
+    "disabled": false
+  },
+  {
+    "id": 351,
+    "name": "樹蕨",
+    "grade": "稀",
+    "score": 23,
+    "note": "直播花",
+    "disabled": false
+  },
+  {
+    "id": 352,
+    "name": "黃蟬花",
+    "grade": "稀",
+    "score": 23,
+    "note": "直播花",
+    "disabled": false
+  },
+  {
+    "id": 353,
+    "name": "碧蟬花",
+    "grade": "稀",
+    "score": 23,
+    "note": "直播花",
+    "disabled": false
+  },
+  {
+    "id": 354,
+    "name": "紫萼",
+    "grade": "稀",
+    "score": 23,
+    "note": "直播花",
+    "disabled": false
+  },
+  {
+    "id": 355,
+    "name": "金雞菊",
+    "grade": "稀",
+    "score": 23,
+    "note": "直播花",
+    "disabled": false
+  },
+  {
+    "id": 356,
+    "name": "烏干達赬桐",
+    "grade": "稀",
+    "score": 23,
+    "note": "直播花",
+    "disabled": false
+  },
+  {
+    "id": 357,
+    "name": "番紅花",
+    "grade": "稀",
+    "score": 23,
+    "note": "直播花",
+    "disabled": false
+  },
+  {
+    "id": 358,
+    "name": "石斛蘭",
+    "grade": "稀",
+    "score": 23,
+    "note": "直播花",
+    "disabled": false
+  },
+  {
+    "id": 359,
+    "name": "寶蓮燈花",
+    "grade": "稀",
+    "score": 23,
+    "note": "直播花",
+    "disabled": false
+  },
+  {
+    "id": 360,
+    "name": "月光曲芍藥",
+    "grade": "稀",
+    "score": 23,
+    "note": "直播花",
+    "disabled": false
+  },
+  {
+    "id": 361,
+    "name": "玫瑰茄",
+    "grade": "稀",
+    "score": 23,
+    "note": "直播花",
+    "disabled": false
+  },
+  {
+    "id": 362,
+    "name": "針墊花",
+    "grade": "稀",
+    "score": 23,
+    "note": "直播花",
+    "disabled": false
+  },
+  {
+    "id": 363,
+    "name": "虎耳花",
+    "grade": "稀",
+    "score": 23,
+    "note": "直播花",
+    "disabled": false
+  },
+  {
+    "id": 364,
+    "name": "黃色帝王花",
+    "grade": "稀",
+    "score": 20,
+    "note": "鮮花商店",
+    "disabled": false
+  },
+  {
+    "id": 365,
+    "name": "白色雪果",
+    "grade": "稀",
+    "score": 20,
+    "note": "鮮花商店",
+    "disabled": false
+  },
+  {
+    "id": 366,
+    "name": "藍色矢車菊",
+    "grade": "稀",
+    "score": 20,
+    "note": "鮮花商店",
+    "disabled": false
+  },
+  {
+    "id": 367,
+    "name": "竹節秋海棠",
+    "grade": "稀",
+    "score": 20,
+    "note": "鮮花商店",
+    "disabled": false
+  },
+  {
+    "id": 368,
+    "name": "紫丁香",
+    "grade": "稀",
+    "score": 20,
+    "note": "鮮花商店",
+    "disabled": false
+  },
+  {
+    "id": 369,
+    "name": "淡粉大岩桐",
+    "grade": "稀",
+    "score": 20,
+    "note": "鮮花商店",
+    "disabled": false
+  },
+  {
+    "id": 370,
+    "name": "木芙蓉",
+    "grade": "稀",
+    "score": 23,
+    "note": "直播花",
+    "disabled": false
+  },
+  {
+    "id": 371,
+    "name": "虎顏花",
+    "grade": "稀",
+    "score": 23,
+    "note": "直播花",
+    "disabled": false
+  },
+  {
+    "id": 372,
+    "name": "奧古斯都",
+    "grade": "稀",
+    "score": 23,
+    "note": "直播花",
+    "disabled": false
+  },
+  {
+    "id": 373,
+    "name": "使君子",
+    "grade": "稀",
+    "score": 23,
+    "note": "直播花",
+    "disabled": false
+  },
+  {
+    "id": 374,
+    "name": "百日草",
+    "grade": "稀",
+    "score": 23,
+    "note": "直播花",
+    "disabled": false
+  },
+  {
+    "id": 375,
+    "name": "風車大麗花",
+    "grade": "稀",
+    "score": 23,
+    "note": "直播花",
+    "disabled": false
+  },
+  {
+    "id": 376,
+    "name": "鼠願",
+    "grade": "稀",
+    "score": 20,
+    "note": "黑市商店",
+    "disabled": false
+  },
+  {
+    "id": 377,
+    "name": "不企床",
+    "grade": "稀",
+    "score": 20,
+    "note": "黑市商店",
+    "disabled": false
+  },
+  {
+    "id": 378,
+    "name": "角堇",
+    "grade": "優",
+    "score": 14,
+    "note": "活動",
+    "disabled": false
+  },
+  {
+    "id": 379,
+    "name": "銀盃草",
+    "grade": "優",
+    "score": 14,
+    "note": "鮮花商店",
+    "disabled": false
+  },
+  {
+    "id": 380,
+    "name": "含羞草",
+    "grade": "優",
+    "score": 14,
+    "note": "鮮花商店",
+    "disabled": false
+  },
+  {
+    "id": 381,
+    "name": "鼠尾草",
+    "grade": "優",
+    "score": 14,
+    "note": "鮮花商店",
+    "disabled": false
+  },
+  {
+    "id": 382,
+    "name": "文心蘭",
+    "grade": "優",
+    "score": 14,
+    "note": "鮮花商店",
+    "disabled": false
+  },
+  {
+    "id": 383,
+    "name": "金銀花",
+    "grade": "優",
+    "score": 14,
+    "note": "鮮花商店",
+    "disabled": false
+  },
+  {
+    "id": 384,
+    "name": "松果菊",
+    "grade": "優",
+    "score": 14,
+    "note": "鮮花商店",
+    "disabled": false
+  },
+  {
+    "id": 385,
+    "name": "星星茉莉",
+    "grade": "優",
+    "score": 14,
+    "note": "鮮花商店",
+    "disabled": false
+  },
+  {
+    "id": 386,
+    "name": "一串紅",
+    "grade": "優",
+    "score": 14,
+    "note": "鮮花商店",
+    "disabled": false
+  },
+  {
+    "id": 387,
+    "name": "炮仗花",
+    "grade": "優",
+    "score": 14,
+    "note": "鮮花商店",
+    "disabled": false
+  },
+  {
+    "id": 388,
+    "name": "粉色老鶴草",
+    "grade": "優",
+    "score": 14,
+    "note": "鮮花商店",
+    "disabled": false
+  },
+  {
+    "id": 389,
+    "name": "粉色露微花",
+    "grade": "優",
+    "score": 14,
+    "note": "鮮花商店",
+    "disabled": false
+  },
+  {
+    "id": 390,
+    "name": "豆豆玫瑰",
+    "grade": "優",
+    "score": 14,
+    "note": "黑市商店",
+    "disabled": false
+  },
+  {
+    "id": 391,
+    "name": "豆豆向日葵",
+    "grade": "優",
+    "score": 14,
+    "note": "黑市商店",
+    "disabled": false
+  },
+  {
+    "id": 392,
+    "name": "轉我50",
+    "grade": "優",
+    "score": 14,
+    "note": "黑市商店",
+    "disabled": false
+  },
+  {
+    "id": 393,
+    "name": "抱花富",
+    "grade": "優",
+    "score": 14,
+    "note": "黑市商店",
+    "disabled": false
+  },
+  {
+    "id": 394,
+    "name": "四果咪",
+    "grade": "優",
+    "score": 14,
+    "note": "黑市商店",
+    "disabled": false
+  },
+  {
+    "id": 395,
+    "name": "菜狗",
+    "grade": "優",
+    "score": 14,
+    "note": "黑市商店",
+    "disabled": false
+  },
+  {
+    "id": 396,
+    "name": "千日紅",
+    "grade": "優",
+    "score": 14,
+    "note": "活動",
+    "disabled": false
+  },
+  {
+    "id": 397,
+    "name": "藍白銀蓮花",
+    "grade": "稀",
+    "score": 23,
+    "note": "週花",
+    "disabled": false
+  }
+];
+const flowers = JSON.parse(document.scripts[0].textContent.split(';')[0]);
+let filtered = flowers;
+
+function render() {
+    document.getElementById('total').textContent = flowers.length;
+    document.getElementById('count').textContent = filtered.length;
+    document.getElementById('results').innerHTML = filtered.map(f => `
+        <tr>
+            <td>${f.id}</td>
+            <td><strong>${f.name}</strong></td>
+            <td><span class="grade grade-${f.grade}">${f.grade}</span></td>
+            <td>${f.score}</td>
+            <td>${f.note || '-'}</td>
+        </tr>
+    `).join('');
+}
+
+function searchFlowers() {
+    const q = document.getElementById('search').value.toLowerCase();
+    filtered = flowers.filter(f => f.name.toLowerCase().includes(q));
+    render();
+}
+
+render();
+</script>
+</body>
+</html>
