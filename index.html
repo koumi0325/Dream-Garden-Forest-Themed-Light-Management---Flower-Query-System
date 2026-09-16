@@ -21,6 +21,19 @@ tr:hover { background: #f8f8f8; }
 .grade-優 { background: #1e88e5; }
 .grade-普 { background: #43a047; }
 .count { color: #666; margin-bottom: 10px; }
+.grade-filter { padding: 6px 12px; margin: 0 5px 5px 0; border: 2px solid #ddd; border-radius: 6px; background: white; cursor: pointer; font-size: 14px; font-weight: 600; transition: all 0.2s; }
+.grade-filter:hover { transform: translateY(-1px); box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+.grade-filter.active { border-color: #2d8a4e; background: #2d8a4e; color: white; }
+.grade-filter.grade-閃 { color: #e53935; }
+.grade-filter.grade-閃.active { background: #e53935; border-color: #e53935; color: white; }
+.grade-filter.grade-星 { color: #f9a825; }
+.grade-filter.grade-星.active { background: #f9a825; border-color: #f9a825; color: #333; }
+.grade-filter.grade-稀 { color: #8e24aa; }
+.grade-filter.grade-稀.active { background: #8e24aa; border-color: #8e24aa; color: white; }
+.grade-filter.grade-優 { color: #1e88e5; }
+.grade-filter.grade-優.active { background: #1e88e5; border-color: #1e88e5; color: white; }
+.grade-filter.grade-普 { color: #43a047; }
+.grade-filter.grade-普.active { background: #43a047; border-color: #43a047; color: white; }
 </style>
 </head>
 <body>
@@ -30,6 +43,15 @@ tr:hover { background: #f8f8f8; }
 </div>
 <div class="search-box">
 <input type="text" id="search" placeholder="輸入花卉名稱搜尋..." onkeyup="searchFlowers()">
+<div style="margin-top: 10px;">
+<label style="margin-right: 10px; font-weight: 600;">篩選等級：</label>
+<button class="grade-filter active" onclick="filterByGrade('all')">全部</button>
+<button class="grade-filter grade-閃" onclick="filterByGrade('閃')">閃</button>
+<button class="grade-filter grade-星" onclick="filterByGrade('星')">星</button>
+<button class="grade-filter grade-稀" onclick="filterByGrade('稀')">稀</button>
+<button class="grade-filter grade-優" onclick="filterByGrade('優')">優</button>
+<button class="grade-filter grade-普" onclick="filterByGrade('普')">普</button>
+</div>
 <div class="count">找到 <strong id="count">0</strong> 筆</div>
 </div>
 <table>
@@ -3091,11 +3113,42 @@ tr:hover { background: #f8f8f8; }
 ];
 const flowers = JSON.parse(document.scripts[0].textContent.split(';')[0]);
 let filtered = flowers;
+let currentGrade = 'all';
+
+// 品級排序順序
+const gradeOrder = { '閃': 1, '星': 2, '稀': 3, '優': 4, '普': 5 };
+
+// 排序函數：先品級，再分數（高到低），再名稱
+function sortFlowers(list) {
+    return list.sort((a, b) => {
+        // 1. 先按品級排序
+        const gradeCompare = (gradeOrder[a.grade] || 99) - (gradeOrder[b.grade] || 99);
+        if (gradeCompare !== 0) return gradeCompare;
+
+        // 2. 再按分數排序（高到低）
+        const scoreCompare = b.score - a.score;
+        if (scoreCompare !== 0) return scoreCompare;
+
+        // 3. 最後按名稱排序
+        return a.name.localeCompare(b.name, 'zh-TW');
+    });
+}
+
+function applyFilters() {
+    const q = document.getElementById('search').value.toLowerCase();
+    filtered = flowers.filter(f => {
+        const matchName = f.name.toLowerCase().includes(q);
+        const matchGrade = currentGrade === 'all' || f.grade === currentGrade;
+        return matchName && matchGrade;
+    });
+    render();
+}
 
 function render() {
     document.getElementById('total').textContent = flowers.length;
     document.getElementById('count').textContent = filtered.length;
-    document.getElementById('results').innerHTML = filtered.map(f => `
+    const sorted = sortFlowers([...filtered]);
+    document.getElementById('results').innerHTML = sorted.map(f => `
         <tr>
             <td>${f.id}</td>
             <td><strong>${f.name}</strong></td>
@@ -3107,9 +3160,17 @@ function render() {
 }
 
 function searchFlowers() {
-    const q = document.getElementById('search').value.toLowerCase();
-    filtered = flowers.filter(f => f.name.toLowerCase().includes(q));
-    render();
+    applyFilters();
+}
+
+function filterByGrade(grade) {
+    currentGrade = grade;
+    // 更新按鈕狀態
+    document.querySelectorAll('.grade-filter').forEach(btn => {
+        btn.classList.remove('active');
+    });
+    event.target.classList.add('active');
+    applyFilters();
 }
 
 render();
