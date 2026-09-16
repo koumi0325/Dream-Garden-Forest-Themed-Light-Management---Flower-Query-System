@@ -56,7 +56,7 @@ tr:hover { background: #f8f8f8; }
 </div>
 <table>
 <thead>
-<tr><th>ID</th><th>花卉名稱</th><th>等級</th><th>分數</th><th>來源</th></tr>
+<tr><th>花卉名稱</th><th>等級</th><th>分數</th><th>來源</th></tr>
 </thead>
 <tbody id="results"></tbody>
 </table>
@@ -3150,7 +3150,6 @@ function render() {
     const sorted = sortFlowers([...filtered]);
     document.getElementById('results').innerHTML = sorted.map(f => `
         <tr>
-            <td>${f.id}</td>
             <td><strong>${f.name}</strong></td>
             <td><span class="grade grade-${f.grade}">${f.grade}</span></td>
             <td>${f.score}</td>
