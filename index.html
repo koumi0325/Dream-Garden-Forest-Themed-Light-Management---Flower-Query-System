@@ -1952,7 +1952,7 @@ tr:hover { background: #f8f8f8; }
   },
   {
     "id": 246,
-    "name": "粉色長春花",
+    "name": "粉紅長春花",
     "grade": "優",
     "score": 14,
     "note": "鮮花商店",
@@ -3253,6 +3253,46 @@ tr:hover { background: #f8f8f8; }
     "score": 14,
     "note": "活動",
     "disabled": false
+  },
+  {
+    "id": 416,
+    "name": "鳳凰花",
+    "grade": "優",
+    "score": 14,
+    "note": "活動",
+    "disabled": false
+  },
+  {
+    "id": 417,
+    "name": "愛神絃歌",
+    "grade": "星",
+    "score": 26,
+    "note": "週花",
+    "disabled": false
+  },
+  {
+    "id": 418,
+    "name": "粉色和聲",
+    "grade": "稀",
+    "score": 23,
+    "note": "鮮花特典",
+    "disabled": false
+  },
+  {
+    "id": 419,
+    "name": "金邊黃槐",
+    "grade": "優",
+    "score": 14,
+    "note": "鮮花特典",
+    "disabled": false
+  },
+  {
+    "id": 420,
+    "name": "藍花亞麻",
+    "grade": "優",
+    "score": 14,
+    "note": "VIP商店",
+    "disabled": false
   }
 ];
 const flowers = JSON.parse(document.scripts[0].textContent.split(';')[0]);
@@ -3262,14 +3302,14 @@ let currentGrade = 'all';
 // 品級排序順序
 const gradeOrder = { '閃': 1, '星': 2, '稀': 3, '優': 4, '普': 5 };
 
-// 排序函數：先品級，再分數（高到低），再名稱
+// 排序函數:先品級,再分數(高到低),再名稱
 function sortFlowers(list) {
     return list.sort((a, b) => {
         // 1. 先按品級排序
         const gradeCompare = (gradeOrder[a.grade] || 99) - (gradeOrder[b.grade] || 99);
         if (gradeCompare !== 0) return gradeCompare;
 
-        // 2. 再按分數排序（高到低）
+        // 2. 再按分數排序(高到低)
         const scoreCompare = b.score - a.score;
         if (scoreCompare !== 0) return scoreCompare;
 
